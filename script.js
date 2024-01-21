@@ -61,6 +61,13 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const calcDisplayBalance = function (movements) {
+  return movements.reduce((acc, cur) => acc + cur, 0);
+};
+
+labelBalance.textContent = `${calcDisplayBalance(movements)}€`;
+
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach(function (movement, i) {
@@ -75,7 +82,6 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
 displayMovements(account1.movements);
 
 /////////////////////////////////////////////////
@@ -87,8 +93,6 @@ const currencies = new Map([
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -174,3 +178,17 @@ const getInitialsForAllAccounts = function (accounts) {
 getInitialsForAllAccounts(accounts);
 
 console.log(accounts);
+
+// filter
+const depositsOnly = movements.filter(movement => movement > 0);
+console.log(depositsOnly);
+
+// reduce
+const sumOfAllMovements = movements.reduce(
+  (acc, cur, ind, arr) => acc + cur,
+  0
+);
+console.log(sumOfAllMovements);
+
+// max value of movements arr
+console.log(movements.reduce((acc, cur) => (acc < cur ? cur : acc), 0));
