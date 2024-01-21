@@ -61,13 +61,13 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// account balance
 const calcDisplayBalance = function (movements) {
   return movements.reduce((acc, cur) => acc + cur, 0);
 };
+labelBalance.textContent = `${calcDisplayBalance(account1.movements)}€`;
 
-labelBalance.textContent = `${calcDisplayBalance(movements)}€`;
-
+// display transactions
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach(function (movement, i) {
@@ -84,6 +84,83 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+// deposits sum
+const calcDisplaySumIn = function (movements) {
+  return movements
+    .filter(element => element > 0)
+    .reduce((acc, element) => acc + element, 0);
+};
+
+// withdrawals sum
+const calcDisplaySumOut = function (movements) {
+  return movements
+    .filter(element => element < 0)
+    .reduce((acc, element) => acc + element, 0);
+};
+
+// interest sum
+const calcDisplayInterest = function (account) {
+  return account.movements
+    .filter(element => element > 0)
+    .reduce(
+      (acc, element) =>
+        element * (account.interestRate / 100) > 1
+          ? acc + element * (account.interestRate / 100)
+          : acc,
+      0
+    );
+};
+
+// accounts
+const initialsArr = [];
+const getInitialsOfAnAccount = function (account) {
+  const initials = account.owner
+    .split(' ')
+    .map(word => word[0].toUpperCase())
+    .join('');
+  return `${initials}`;
+};
+
+const getInitialsForAllAccounts = function (accounts) {
+  accounts.forEach(function (account) {
+    account.username = getInitialsOfAnAccount(account);
+  });
+};
+
+getInitialsForAllAccounts(accounts);
+
+console.log(accounts);
+
+// login
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault(); // prevent form from submiting
+  console.log('Login attempt');
+  currentAccount = accounts.find(
+    account =>
+      account.username.toLowerCase() === inputLoginUsername.value.toLowerCase()
+  );
+  console.log(currentAccount);
+  if (Number(inputLoginPin.value) === currentAccount?.pin) {
+    console.log('Logged in successfuly');
+    //display UI and message
+    const firstName = currentAccount.owner.split(' ')[0];
+    labelWelcome.textContent = `Welcom ${firstName}`;
+    containerApp.style.opacity = 100;
+    //clear input fields
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+    //Display movements
+    displayMovements(currentAccount.movements);
+    // display balance
+    calcDisplayBalance(currentAccount.movements);
+    // display summary
+    labelSumIn.textContent = `${calcDisplaySumIn(currentAccount.movements)}€`;
+    labelSumOut.textContent = `${calcDisplaySumOut(currentAccount.movements)}€`;
+    labelSumInterest.textContent = `${calcDisplayInterest(currentAccount)}€`;
+  }
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -93,6 +170,8 @@ const currencies = new Map([
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -147,48 +226,28 @@ const currencies = new Map([
 // });
 
 // map
-const eurToUsd = 1.1;
-const movementsUsd = movements.map(movement => movement * 1.1);
-console.log(movements);
-console.log(movementsUsd);
+// const eurToUsd = 1.1;
+// const movementsUsd = movements.map(movement => movement * 1.1);
+// console.log(movements);
+// console.log(movementsUsd);
 
-const movementsDesc = movements.map(element =>
-  element > 0
-    ? `Deposit of ${Math.abs(element)}`
-    : `Withdrawal of ${Math.abs(element)}`
-);
-console.log(movementsDesc);
+// const movementsDesc = movements.map(element =>
+//   element > 0
+//     ? `Deposit of ${Math.abs(element)}`
+//     : `Withdrawal of ${Math.abs(element)}`
+// );
+// console.log(movementsDesc);
 
-// accounts
-const initialsArr = [];
-const getInitialsOfAnAccount = function (account) {
-  const initials = account.owner
-    .split(' ')
-    .map(word => word[0].toUpperCase())
-    .join('. ');
-  return `${initials}.`;
-};
+// // filter
+// const depositsOnly = movements.filter(movement => movement > 0);
+// console.log(depositsOnly);
 
-const getInitialsForAllAccounts = function (accounts) {
-  accounts.forEach(function (account) {
-    account.unsername = getInitialsOfAnAccount(account);
-  });
-};
+// // reduce
+// const sumOfAllMovements = movements.reduce(
+//   (acc, cur, ind, arr) => acc + cur,
+//   0
+// );
+// console.log(sumOfAllMovements);
 
-getInitialsForAllAccounts(accounts);
-
-console.log(accounts);
-
-// filter
-const depositsOnly = movements.filter(movement => movement > 0);
-console.log(depositsOnly);
-
-// reduce
-const sumOfAllMovements = movements.reduce(
-  (acc, cur, ind, arr) => acc + cur,
-  0
-);
-console.log(sumOfAllMovements);
-
-// max value of movements arr
-console.log(movements.reduce((acc, cur) => (acc < cur ? cur : acc), 0));
+// // max value of movements arr
+// console.log(movements.reduce((acc, cur) => (acc < cur ? cur : acc), 0));
