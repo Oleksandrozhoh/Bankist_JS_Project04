@@ -141,3 +141,36 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // currencies1.forEach(function (value, key, map) {
 //   console.log(`${key}: ${value}`);
 // });
+
+// map
+const eurToUsd = 1.1;
+const movementsUsd = movements.map(movement => movement * 1.1);
+console.log(movements);
+console.log(movementsUsd);
+
+const movementsDesc = movements.map(element =>
+  element > 0
+    ? `Deposit of ${Math.abs(element)}`
+    : `Withdrawal of ${Math.abs(element)}`
+);
+console.log(movementsDesc);
+
+// accounts
+const initialsArr = [];
+const getInitialsOfAnAccount = function (account) {
+  const initials = account.owner
+    .split(' ')
+    .map(word => word[0].toUpperCase())
+    .join('. ');
+  return `${initials}.`;
+};
+
+const getInitialsForAllAccounts = function (accounts) {
+  accounts.forEach(function (account) {
+    account.unsername = getInitialsOfAnAccount(account);
+  });
+};
+
+getInitialsForAllAccounts(accounts);
+
+console.log(accounts);
