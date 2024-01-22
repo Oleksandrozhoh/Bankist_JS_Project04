@@ -96,7 +96,7 @@ const calcDisplaySumOut = function (movements) {
   const sumOut = movements
     .filter(element => element < 0)
     .reduce((acc, element) => acc + element, 0);
-  labelSumOut.textContent = `${sumOut}€`;
+  labelSumOut.textContent = `${Math.abs(sumOut)}€`;
 };
 
 // interest sum
@@ -110,7 +110,7 @@ const calcDisplayInterest = function (account) {
           : acc,
       0
     );
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 // accounts
@@ -195,6 +195,20 @@ btnTransfer.addEventListener('click', function (e) {
 
     updateUiData(currentAccount);
   }
+});
+
+// loan functionality
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const requestedAmnt = Number(inputLoanAmount.value);
+  if (
+    requestedAmnt > 0 &&
+    currentAccount.movements.some(element => element > requestedAmnt * 0.1)
+  ) {
+    currentAccount.movements.push(requestedAmnt);
+    updateUiData(currentAccount);
+  }
+  inputLoanAmount.value = '';
 });
 
 // delete account
