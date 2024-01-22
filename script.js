@@ -323,3 +323,15 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 // // max value of movements arr
 // console.log(movements.reduce((acc, cur) => (acc < cur ? cur : acc), 0));
+
+// flat and flatMap methods
+const allMovementsNestedArray = accounts.map(account => account.movements);
+const allMovements1DArray = allMovementsNestedArray.flat();
+const sumOfAllMovements = allMovements1DArray.reduce((acc, each) => acc + each);
+console.log(sumOfAllMovements);
+
+// same result with flatMap method
+const sumOfAllMovements2 = accounts
+  .flatMap(account => account.movements)
+  .reduce((acc, each) => acc + each);
+console.log(sumOfAllMovements2);
