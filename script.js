@@ -350,3 +350,24 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 // console.log(movements);
 // console.log(movements.sort((a, b) => (a > b ? 1 : -1)));
+
+// creating and filling arrays
+const arr = new Array(7); // array with 7 empty elements
+arr.fill(3, 2, 4); // fill array with 3 value starting from index 2 to 4
+console.log(arr);
+
+const arr1 = Array.from({ length: 7 }, () => 1); // array with 7 elements of value 1
+const arr2 = Array.from({ length: 7 }, (cur, i) => i + 1); // array with 7 elements and cb function defines the vales just like in map method
+
+// array with 100 random dice rolls
+const arr3 = Array.from({ length: 100 }, (_, i) =>
+  Math.floor(Math.random() * 6 + 1)
+);
+console.log(arr3);
+
+const movementsUI = document.querySelectorAll('.movements__value');
+console.log('movementUI = ' + movementsUI);
+movementsUI.forEach(each => console.log(each));
+
+const movmentsUItoArray = Array.from(movementsUI);
+console.log(movmentsUItoArray);
