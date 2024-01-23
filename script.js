@@ -68,9 +68,11 @@ const calcDisplayBalance = function (account) {
 };
 
 // display transactions
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach(function (movement, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  movs.forEach(function (movement, i) {
     const movType = movement > 0 ? 'deposit' : 'withdrawal';
     const html = `
         <div class="movements__row">
@@ -231,7 +233,12 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
-// console.log(accounts);
+let sortingState = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  sortingState = !sortingState;
+  displayMovements(currentAccount.movements, sortingState);
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -325,13 +332,21 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // console.log(movements.reduce((acc, cur) => (acc < cur ? cur : acc), 0));
 
 // flat and flatMap methods
-const allMovementsNestedArray = accounts.map(account => account.movements);
-const allMovements1DArray = allMovementsNestedArray.flat();
-const sumOfAllMovements = allMovements1DArray.reduce((acc, each) => acc + each);
-console.log(sumOfAllMovements);
+// const allMovementsNestedArray = accounts.map(account => account.movements);
+// const allMovements1DArray = allMovementsNestedArray.flat();
+// const sumOfAllMovements = allMovements1DArray.reduce((acc, each) => acc + each);
+// console.log(sumOfAllMovements);
 
-// same result with flatMap method
-const sumOfAllMovements2 = accounts
-  .flatMap(account => account.movements)
-  .reduce((acc, each) => acc + each);
-console.log(sumOfAllMovements2);
+// // same result with flatMap method
+// const sumOfAllMovements2 = accounts
+//   .flatMap(account => account.movements)
+//   .reduce((acc, each) => acc + each);
+// console.log(sumOfAllMovements2);
+
+// // sorting arrays
+// const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+// console.log(owners.sort());
+// console.log(owners);
+
+// console.log(movements);
+// console.log(movements.sort((a, b) => (a > b ? 1 : -1)));
