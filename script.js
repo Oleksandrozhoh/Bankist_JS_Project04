@@ -371,3 +371,32 @@ movementsUI.forEach(each => console.log(each));
 
 const movmentsUItoArray = Array.from(movementsUI);
 console.log(movmentsUItoArray);
+
+// array mmethods practice
+
+// count sum of deposits
+const bankDepositSum = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .filter(each => each > 0)
+  .reduce((cur, next) => cur + next, 0);
+console.log(bankDepositSum);
+
+// count number of transaction > 1000
+const numOfDepositsGreaterThan1000 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((count, cur) => (cur > 1000 ? ++count : count), 0);
+console.log(numOfDepositsGreaterThan1000);
+
+// count number of transaction > 1000
+const sums = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      //cur > 0 ? (sums.deposits += cur) : (sums.withdrawals += cur);
+      sums[cur > 0 ? `deposits` : `withdrawals`] += cur;
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+console.log(sums);
